@@ -5,29 +5,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Sara toy robot </title>
+    <title>Sara's Toy robot challenge in JavaScript</title>
     <style>
         body {
             height: 100vh;
-            display: flex;
             align-items: center;
-            background: linear-gradient(to top left, #2875b4, #6f71d5);
+            background: linear-gradient(to top left, #295593);
         }
 
         h1 {
             font-family: sans-serif;
-            font-size: 50px;
+            font-size: 40px;
             line-height: 1.3;
             width: 100%;
-            padding: 30px;
+            padding: 70px;
             text-align: center;
             color: white;
+        }
+
+        h2 {
+            font-family: sans-serif;
+            font-size: 30px;
+            line-height: 1.3;
+            width: 100%;
+            padding: 0px;
+            text-align: center;
+            color: white;
+        }
+
+        p {
+            font-family: sans-serif;
+            font-size: 20px;
+            line-height: 1.3;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        #fileInput {
+            display: flex;
+            margin: auto;
+            padding: 0px;
+            font-size: 15px;
+            align-items: center;
         }
     </style>
 </head>
 
 <body>
-    <h1>Sara toy robot</h1>
+    <h1>Sara's Toy robot challenge in JavaScript</h1>
+    <h2>Select robot commands file:</h2>
+    <p id="lineout"></p>
+    <input type="file" id="fileInput" accept=".txt" />
+    <p>Press F12 or Ctrl + Shift + I and select console to see debug output
+    <p>
+    <p id="demo"></p>
+
+    <script src="script.js"></script>
+
 </body>
 
 </html>
