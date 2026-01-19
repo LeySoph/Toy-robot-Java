@@ -75,16 +75,11 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
 
         reader.onload = function (e) {
             const content = e.target.result;
-            // Split the entire content into an array of lines
             const lines = content.split(/\r\n|\n|\r/);
 
             lines.forEach((line, index) => {
-                // console.log(`Line ${index + 1}: ${line}`);
                 console.log(`${line}`);
-                // Process each line here
-
-                let n = line.search(/place/i);	 // find place in text with case insensitive /i  using regular expressions		
-                //console.log(n);		
+                let n = line.search(/place/i);
                 if (n >= 0) {
                     console.log("place found");
 
@@ -92,7 +87,7 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
                     console.log(place_array[0]);
                     const trimmed_place_array = place_array;
                     trimmed_place_array[0] = place_array[0].replace(/place/i, "");
-                    x = parseInt(place_array[0], 10); //or number(place_array[0])
+                    x = parseInt(place_array[0], 10);
                     y = parseInt(place_array[1], 10);
                     console.log(`${place_array}`);
                     console.log(place_array[0]);
@@ -105,12 +100,10 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
 
                     console.log("direction :" + place_array[2]);
 
-                    //  check to make sure the placement is valid and do nothing if off the board
                     if ((x <= 4) && (y <= 4) && (x >= 0) && (y >= 0) && (place_array[2] == "NORTH" || place_array[2] == "SOUTH" || place_array[2] == "EAST" || place_array[2] == "WEST")) {
                         board_location[0] = x;
                         board_location[1] = y;
                         board_location[2] = trimmed_place_array[2];
-                        // enable other commands to be used once place has been done
                         placed = 1;
 
                         console.log("robotcoords :" + board_location);
@@ -118,43 +111,32 @@ document.getElementById('fileInput').addEventListener('change', (event) => {
 
                 }
 
-                n = line.search(/move/i);	 // find move in text with case insensitive /i  using regular expressions		
-                //console.log(n);
+                n = line.search(/move/i);
                 if (n >= 0) {
-                    //console.log("move found"); // debug line to show move found in text.
                     if (placed == 1) {
                         move_robot(board_location[0], board_location[1], board_location[2]);
                     }
                 }
 
-                n = line.search(/left/i);	 // find left in text with case insensitive /i  using regular expressions		
-                //console.log(n);
+                n = line.search(/left/i);
                 if (n >= 0) {
-                    //console.log("left found"); // debug line to show left found in text.
                     if (placed == 1) {
                         turn_robot(board_location[2], "LEFT");
                         console.log("left found and placed enabled test");
                     }
                 }
 
-                n = line.search(/right/i);	 // find right in text with case insensitive /i  using regular expressions		
-                //console.log(n);
+                n = line.search(/right/i);
                 if (n >= 0) {
-                    //	console.log("right found"); // debug line to show right found in text.
                     if (placed == 1) {
                         turn_robot(board_location[2], "RIGHT");
                     }
                 }
 
-                n = line.search(/report/i);	 // find report in text with case insensitive /i  using regular expressions		
-                //console.log(n);
+                n = line.search(/report/i);
                 if (n >= 0) {
-                    //	console.log("report found"); // debug line to show report found in text.
-                    //		# print output and concatenate the location data into text strings
                     console.log("OUTPUT:" + board_location[0] + "," + board_location[1] + "," + board_location[2]);
                 }
-
-
             });
         };
 
