@@ -1,96 +1,78 @@
-let board_location = [-1, -1, "UNPLACED"];
-let placed = 0;
-let x = -1;
-let y = -1;
+let board_position = { x: 0, y: 0, direction: "UNPLACES" };
 
-function move_robot(x, y, direction) {
-    if (direction == "NORTH" && y < 4) {
-        y = y + 1;
-    } else if (direction == "SOUTH" && y > 0) {
-        y = y - 1;
-    } else if (direction == "EAST" && x < 4) {
-        x = x + 1;
-    } else if (direction == "WEST" && x > 0) {
-        x = x - 1;
+function move_robot() {
+
+    if (board_position.direction == "NORTH" && board_position.y < 4) {
+        board_position.y++;
+    } else if (board_position.direction == "SOUTH" && board_position.y > 0) {
+        board_position.y--;
+    } else if (board_position.direction == "EAST" && board_position.x < 4) {
+        board_position.x++;
+    } else if (board_position.direction == "WEST" && board_position.x > 0) {
+        board_position.x--;
+
     }
-    board_location[0] = x;
-    board_location[1] = y;
 }
 
-function turn_robot(direction, turn) {
-    if ((direction == "NORTH" && turn == "LEFT") || (direction == "SOUTH" && turn == "RIGHT")) {
-        direction = "WEST";
-    } else if ((direction == "NORTH" && turn == "RIGHT") || (direction == "SOUTH" && turn == "LEFT")) {
-        direction = "EAST";
-    } else if ((direction == "EAST" && turn == "LEFT") || (direction == "WEST" && turn == "RIGHT")) {
-        direction = "NORTH";
-    } else if ((direction == "WEST" && turn == "LEFT") || (direction == "EAST" && turn == "RIGHT")) {
-        direction = "SOUTH";
+function turn_robot(turn) {
+
+    if ((board_position.direction == "NORTH" && turn == "LEFT") || (board_position.direction == "SOUTH" && turn == "RIGHT")) {
+        board_position.direction = "WEST";
+    } else if ((board_position.direction == "NORTH" && turn == "RIGHT") || (board_position.direction == "SOUTH" && turn == "LEFT")) {
+        board_position.direction = "EAST";
+    } else if ((board_position.direction == "EAST" && turn == "LEFT") || (board_position.direction == "WEST" && turn == "RIGHT")) {
+        board_position.direction = "NORTH";
+    } else if ((board_position.direction == "WEST" && turn == "LEFT") || (board_position.direction == "EAST" && turn == "RIGHT")) {
+        board_position.direction = "SOUTH";
     }
-    board_location[2] = direction;
 }
 
 document.getElementById('fileInput').addEventListener('change', (event) => {
+
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-
         reader.onload = function (e) {
             const content = e.target.result;
             const lines = content.split(/\r\n|\n|\r/);
-
             lines.forEach((line, index) => {
-                let n = line.search(/place/i);
-                if (n >= 0) {
+                let pattern = /place/i;
+                if (pattern.test(line) == true) {
                     const place_array = line.split(",");
                     const trimmed_place_array = place_array;
                     trimmed_place_array[0] = place_array[0].replace(/place/i, "");
-                    x = parseInt(place_array[0], 10);
-                    y = parseInt(place_array[1], 10);
-
-
+                    x = Number(place_array[0]);
+                    y = Number(place_array[1]);
                     if (x <= 4 && y <= 4 && x >= 0 && y >= 0 && (place_array[2] == "NORTH" || place_array[2] == "SOUTH" || place_array[2] == "EAST" || place_array[2] == "WEST")) {
-                        board_location[0] = x;
-                        board_location[1] = y;
-                        board_location[2] = trimmed_place_array[2];
-                        placed = 1;
-
-                    }
-
-                }
-
-                n = line.search(/move/i);
-                if (n >= 0) {
-                    if (placed == 1) {
-                        move_robot(board_location[0], board_location[1], board_location[2]);
+                        board_position.x = x;
+                        board_position.y = y;
+                        board_position.direction = trimmed_place_array[2];
+                        placed = true;
                     }
                 }
-
-                n = line.search(/left/i);
-                if (n >= 0) {
-                    if (placed == 1) {
-                        turn_robot(board_location[2], "LEFT");
+                if (placed == true) {
+                    pattern = /move/i;
+                    if (pattern.test(line) == true) {
+                        move_robot();
+                    }
+                    pattern = /left/i;
+                    if (pattern.test(line) == true) {
+                        turn_robot("LEFT");
+                    }
+                    pattern = /right/i;
+                    if (pattern.test(line) == true) {
+                        turn_robot("RIGHT");
                     }
                 }
-
-                n = line.search(/right/i);
-                if (n >= 0) {
-                    if (placed == 1) {
-                        turn_robot(board_location[2], "RIGHT");
-                    }
-                }
-
-                n = line.search(/report/i);
-                if (n >= 0) {
-                    console.log("OUTPUT:" + board_location[0] + "," + board_location[1] + "," + board_location[2]);
+                pattern = /report/i;
+                if (pattern.test(line) == true) {
+                    console.log("OUTPUT:" + board_position.x + "," + board_position.y + "," + board_position.direction);
                 }
             });
         };
-
         reader.onerror = function (e) {
             console.error('Error reading file: ', e.target.error);
         };
-
         reader.readAsText(file, 'UTF-8');
     }
 });
