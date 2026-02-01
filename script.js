@@ -34,9 +34,10 @@ function fileLoad(e) {
 
     const content = e.target.result;
     const lines = content.split(/\r\n|\n|\r/);
+    let placed = false;
     lines.forEach((line, index) => {
         let pattern = /place/i;
-        if (pattern.test(line) == true) {
+        if (pattern.test(line)) {
             const place_array = line.split(",");
             const trimmed_place_array = place_array;
             trimmed_place_array[0] = place_array[0].replace(/place/i, "");
@@ -51,20 +52,20 @@ function fileLoad(e) {
         }
         if (placed == true) {
             pattern = /move/i;
-            if (pattern.test(line) == true) {
+            if (pattern.test(line)) {
                 move_robot();
             }
             pattern = /left/i;
-            if (pattern.test(line) == true) {
+            if (pattern.test(line)) {
                 turn_robot(turns.left);
             }
             pattern = /right/i;
-            if (pattern.test(line) == true) {
+            if (pattern.test(line)) {
                 turn_robot(turns.right);
             }
         }
         pattern = /report/i;
-        if (pattern.test(line) == true) {
+        if (pattern.test(line)) {
             console.log("OUTPUT:" + board_position.x + "," + board_position.y + "," + board_position.direction);
         }
     });
